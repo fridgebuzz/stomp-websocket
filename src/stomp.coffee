@@ -471,7 +471,10 @@ class Client
   #       {'ack': 'client'}
   #     );
   nack: (messageID, subscription, headers = {}) ->
-    headers["message-id"] = messageID
+    if (@version == Stomp.VERSIONS.V1_2)
+      headers["id"] = messageID
+    else
+      headers["message-id"] = messageID
     headers.subscription = subscription
     @_transmit "NACK", headers
 
